@@ -13,6 +13,10 @@ dependencies:
   shared_preferences: ^2.2.2
   provider: ^6.1.2
 
+  flutter: 
+    sdk: flutter
+  speech_to_text: ^6.3.0    # <--- यह लाइन जोड़नी है
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

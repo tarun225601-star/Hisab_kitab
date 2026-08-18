@@ -24,9 +24,6 @@ jobs:
           flutter-version: '3.19.6'
           cache: true
 
-      - name: Create Android Directory Structure
-        run: flutter create . --platforms=android --org com.hisab.kitab
-
       - name: Install Dependencies
         run: flutter pub get
 

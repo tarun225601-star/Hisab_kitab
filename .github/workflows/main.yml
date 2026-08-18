@@ -1,0 +1,7 @@
+à¤¯à¤¹à¤¾à¤ à¤à¤ªà¤à¥ Flutter à¤ªà¥à¤°à¥à¤à¥à¤à¥à¤ à¤à¥ à¤²à¤¿à¤ à¤à¤µà¤¶à¥à¤¯à¤ à¤«à¤¾à¤à¤²à¥à¤ à¤à¤° à¤«à¥à¤²à¥à¤¡à¤° à¤à¤¾ à¤¸à¤¹à¥ à¤ªà¤¾à¤¥ (Directory Tree Structure) à¤¦à¤¿à¤¯à¤¾ à¤à¤¯à¤¾ à¤¹à¥:
+
+* pubspec.yaml
+* .github/workflows/main.yml
+* lib/main.dart
+* android/app/build.gradle
+* android/app/src/main/AndroidManifest.xml

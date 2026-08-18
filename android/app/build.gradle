@@ -1,38 +1,7 @@
-plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
-}
+à¤¯à¤¹à¤¾à¤ à¤à¤ªà¤à¥ Flutter à¤ªà¥à¤°à¥à¤à¥à¤à¥à¤ à¤à¥ à¤²à¤¿à¤ à¤à¤µà¤¶à¥à¤¯à¤ à¤«à¤¾à¤à¤²à¥à¤ à¤à¤° à¤«à¥à¤²à¥à¤¡à¤° à¤à¤¾ à¤¸à¤¹à¥ à¤ªà¤¾à¤¥ (Directory Tree Structure) à¤¹à¥:
 
-android {
-    namespace "com.viziag.app"
-    compileSdk flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    defaultConfig {
-        applicationId "com.viziag.app"
-        minSdk 21
-        targetSdk flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-    }
-
-    buildTypes {
-        release {
-            signingConfig signingConfigs.debug
-        }
-    }
-}
-
-flutter {
-    source '../..'
-}
+* pubspec.yaml
+*.github/workflows/main.yml
+* lib/main.dart
+* android/app/build.gradle
+* android/app/src/main/AndroidManifest.xml

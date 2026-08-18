@@ -1,132 +1,111 @@
+// lib/main.dart
 import 'package:flutter/material.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(const ViziagKhataApp());
+  runApp(const MyApp());
 }
 
-class ViziagKhataApp extends StatelessWidget {
-  const ViziagKhataApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Viziag Khata',
-      theme: ThemeData(primarySwatch: Colors.indigo),
-      home: const KhataHomePage(),
+    return const MaterialApp(
+      home: MyHomePage(),
     );
   }
 }
 
-class KhataHomePage extends StatefulWidget {
-  const KhataHomePage({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
-  State<KhataHomePage> createState() => _KhataHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _KhataHomePageState extends State<KhataHomePage> {
-  late stt.SpeechToText _speech;
-  bool _isListening = false;
-  String _textSpoken = "माइक दबाकर बोलिए (जैसे: राजू को 200 दिए)";
-  
-  final List<Map<String, dynamic>> _khataList = [
-    {"name": "राजू", "amount": 500, "type": "उधार"},
-    {"name": "सोहन", "amount": 200, "type": "जमा"},
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _speech = stt.SpeechToText();
-  }
-
-  void _listen() async {
-    if (!_isListening) {
-      bool available = await _speech.initialize(
-        onStatus: (val) => print('status: $val'),
-        onError: (val) => print('error: $val'),
-      );
-      if (available) {
-        setState(() => _isListening = true);
-        _speech.listen(
-          onResult: (val) => setState(() {
-            _textSpoken = val.recognizedWords;
-          }),
-        );
-      }
-    } else {
-      setState(() => _isListening = false);
-      _speech.stop();
-      _addKhataFromVoice(_textSpoken);
-    }
-  }
-
-  void _addKhataFromVoice(String speechText) {
-    if (speechText.isNotEmpty && speechText != "माइक दबाकर बोलिए (जैसे: राजू को 200 दिए)") {
-      setState(() {
-        _khataList.add({"name": "वॉयस एंट्री", "amount": 100, "type": speechText});
-        _textSpoken = "जोड़ दिया गया: $speechText";
-      });
-    }
-  }
+class _MyHomePageState extends State<MyHomePage> {
+  final _formKey = GlobalKey<FormState>();
+  final _apiKeyController = TextEditingController();
+  final _apiSecretController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Viziag Voice Khata'),
-        backgroundColor: Colors.indigo,
-        foregroundColor: Colors.white,
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            color: Colors.indigo.shade50,
-            width: double.infinity,
-            child: Text(
-              _textSpoken,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.indigo),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _khataList.length,
-              itemBuilder: (context, index) {
-                final item = _khataList[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: item['type'] == 'जमा' ? Colors.green : Colors.red,
-                      child: Icon(item['type'] == 'जमा' ? Icons.arrow_downward : Icons.arrow_upward, color: Colors.white),
-                    ),
-                    title: Text(item['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text("विवरण: ${item['type']}"),
-                    trailing: Text(
-                      "₹${item['amount']}",
-                      style: TextStyle(
-                        fontSize: 16, 
-                        fontWeight: FontWeight.bold, 
-                        color: item['type'] == 'जमा' ? Colors.green : Colors.red
+        title: const Text('Hisab Kitab'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Save API Keys'),
+                    content: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: _apiKeyController,
+                            decoration: const InputDecoration(
+                              labelText: 'API Key',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter API key';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          TextFormField(
+                            controller: _apiSecretController,
+                            decoration: const InputDecoration(
+                              labelText: 'API Secret',
+                              border: OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter API secret';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
+                    actions: [
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Save'),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('api_key', _apiKeyController.text);
+                            await prefs.setString('api_secret', _apiSecretController.text);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _listen,
-        backgroundColor: _isListening ? Colors.red : Colors.indigo,
-        icon: Icon(_isListening ? Icons.mic : Icons.mic_none),
-        label: Text(_isListening ? "सुन रहे हैं... बोलिए..." : "बोलकर हिसाब जोड़ें"),
+      body: const Center(
+        child: Text('Hisab Kitab'),
       ),
     );
   }

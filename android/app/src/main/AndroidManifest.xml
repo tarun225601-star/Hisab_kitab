@@ -1,7 +1,32 @@
-à¤¯à¤¹à¤¾à¤ à¤à¤ªà¤à¥ Flutter à¤ªà¥à¤°à¥à¤à¥à¤à¥à¤ à¤à¥ à¤²à¤¿à¤ à¤à¤µà¤¶à¥à¤¯à¤ à¤«à¤¾à¤à¤²à¥à¤ à¤à¥ à¤ªà¤¾à¤¥ à¤¦à¤¿à¤ à¤à¤ à¤¹à¥à¤:
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-1. à¤°à¥à¤ à¤®à¥à¤ à¤à¥à¤¨à¥à¤«à¤¼à¤¿à¤à¤°à¥à¤¶à¤¨ à¤«à¤¾à¤à¤²: `pubspec.yaml`
-2. à¤à¤¿à¤à¤¹à¤¬ à¤µà¤°à¥à¤à¤«à¥à¤²à¥ à¤à¥ à¤«à¤¾à¤à¤²: `.github/workflows/main.yml`
-3. à¤®à¥à¤¨ à¤¡à¤¾à¤°à¥à¤ à¤à¥à¤¡ à¤«à¤¾à¤à¤²: `lib/main.dart`
-4. à¤à¤à¤¡à¥à¤°à¥à¤à¤¡ à¤¬à¤¿à¤²à¥à¤¡ à¤à¥à¤°à¥à¤¡à¤²à¥ à¤«à¤¾à¤à¤²: `android/app/build.gradle`
-5. à¤à¤à¤¡à¥à¤°à¥à¤à¤¡ à¤®à¥à¤¨à¤¿à¤«à¥à¤¸à¥à¤ à¤«à¤¾à¤à¤²: `android/app/src/main/AndroidManifest.xml`
+    <application
+        android:label="HisabKitab"
+        android:name="${applicationName}"
+        android:icon="@mipmap/ic_launcher">
+        
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            
+            <!-- यहाँ वो जरूरी मेटा-डाटा है जो एरर ठीक करेगा -->
+            <meta-data
+              android:name="flutterEmbedding"
+              android:value="2" />
+              
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+    </application>
+</manifest>

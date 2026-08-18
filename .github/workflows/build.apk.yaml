@@ -1,33 +1,35 @@
-name: Build Flutter APK
+name: Build Release APK
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main" ] # या तुम्हारी जो ब्रांच हो (जैसे master)
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: 'zulu'
           java-version: '17'
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
+          flutter-version: '3.x' # या तुम्हारा जो फ्लटर वर्शन हो
+          channel: 'stable'
           cache: true
 
-      - name: Install Dependencies
-        run: flutter pub get
-
-      - name: Clean Build Cache
-        run: flutter clean
+      - name: Clean and Fix Project Android Structure
+        run: |
+          flutter clean
+          flutter pub get
+          flutter create . --platforms=android
 
       - name: Build Release APK
         run: flutter build apk --release --verbose
@@ -35,5 +37,5 @@ jobs:
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: viziag-khata-release
+          name: release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
